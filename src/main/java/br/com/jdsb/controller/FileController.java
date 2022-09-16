@@ -40,9 +40,9 @@ public class FileController {
 		this.dsVersao = dsVercao;
 		List<String> produtos = new ArrayList<>();
 		produtos.add("mges");
-//		produtos.add("mgco");
-//		produtos.add("mgce");
-//		produtos.add("acma");
+		produtos.add("mgco");
+		produtos.add("mgce");
+		produtos.add("acma");
 		
 		for(String produto:produtos) {
 			atualizaBaseDeDados(produto);
@@ -128,6 +128,7 @@ public class FileController {
 	}
 	
 
+	@SuppressWarnings("unused")
 	private void gerarArquivo(List<Trigger> trgs) {
 		StringBuilder cabecalho = new StringBuilder();
 		cabecalho.append("--<DS_SCRIPT>").append("\n");
@@ -141,11 +142,6 @@ public class FileController {
 		cabecalho.append("--<USUARIO=DBAMV>").append("\n");
 		
 		StringBuilder rollbackStript = new StringBuilder();
-//		grants.append("\n");
-//		grants.append("/");
-//		grants.append("\n");
-//		grants.append("GRANT EXECITE ON %s TO MV2000");
-//		grants.append("/");
 		for(Trigger trigger:trgs) {
 			rollbackStript.append("DROP TRIGGER ").append(trigger.getNmTrigger()).append("\n");;
 			rollbackStript.append("/").append("\n");;
@@ -165,7 +161,6 @@ public class FileController {
 				String caminhoProcedures = caminho.concat("\\procedures\\");
 				String caminhoTriggers= caminho.concat("\\triggers\\");
 				String caminhoWrapper= caminho.concat("\\WRAPPED\\");
-				//String rollback= caminho.concat("\\ROLLBACK\\");
 				Files.writeString(new File(caminhoProcedures.concat(trigger.getNmProcedure().concat(".SQL"))).toPath(), String.format(cabecalho.toString(), trigger.getNmProcedure(),"PROCEDURE").concat(trigger.getDsProcedureGerada()), StandardCharsets.ISO_8859_1, StandardOpenOption.CREATE);
 				Files.writeString(new File(caminhoTriggers.concat(trigger.getNmTrigger().concat(".SQL"))).toPath(), String.format(cabecalho.toString(), trigger.getNmTrigger(),"TRIGGER").concat(trigger.getDsConteudoNovaTrigger()), StandardCharsets.ISO_8859_1, StandardOpenOption.CREATE);
 				Files.writeString(new File(caminhoWrapper.concat(trigger.getNmProcedure().concat(".SQL"))).toPath(), String.format(cabecalho.toString(), trigger.getNmProcedure(),"PROCEDURE").concat(trigger.getDsProcedureEncriptada()), StandardCharsets.ISO_8859_1, StandardOpenOption.CREATE);
